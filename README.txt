@@ -18,7 +18,14 @@ same routines.
 At the time the routine was much faster then the available EXIF hacks in C++, Perl
 and Python that was available then and it also preserved the private EXIF data
 instead of trashing it like the libexif did. The patched was accepted by the gThumb
-prject somewhere in 2007.
+project somewhere in 2007. See the following function header for a good moticvation:
+
+        /* This function updates ONLY the affected tag. Unlike libexif, it does
+           not attempt to correct or re-format other data. This helps preserve
+           the integrity of certain MakerNote entries, by avoiding re-positioning
+           of the data whenever possible. Some MakerNotes incorporate absolute
+           offsets and others use relative offsets. The offset issue is 
+           avoided if tags are not moved or resized if not required. */
 
 I also wrote a special EXIF thumbnail extractor for the Gnome desktop itself and it 
 was accepted by proxy through the gThumb maintainers. Great fun and a good insight 
