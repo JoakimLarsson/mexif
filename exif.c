@@ -47,8 +47,7 @@ const char types[] = {0x00, 0x01, 0x01, 0x02, 0x04, 0x08, 0x00, 0x08, 0x00, 0x04
  
 #define DEBUG(x) //x
  
-int
-gth_minimal_exif_tag_write (const char *filename,
+int minimal_exif_tag_write (const char *filename,
  	                    ExifTag     etag,
  			    void       *data,
  			    int         size,
@@ -85,7 +84,7 @@ gth_minimal_exif_tag_write (const char *filename,
         int           ni = 0;       // iundex into names
  	int           cifdi = 0;    // curret ifd index
  
- 	DEBUG(printf("gth_minimal_exif_tag_write(%s, %04x, %08x, %d, %02x)\n", filename, etag, data, size, ifds);)
+ 	DEBUG(printf("minimal_exif_tag_write(%s, %04x, %08x, %d, %02x)\n", filename, etag, data, size, ifds);)
  
         // Init IFD stack
  	IFD_OFFSET_PUSH(0);
@@ -253,3 +252,35 @@ gth_minimal_exif_tag_write (const char *filename,
  
  	return readsize == writesize ? PATCH_EXIF_OK : PATCH_EXIF_FILE_ERROR; 
 }
+
+
+/*
+ * Main function...
+ */
+int main(int argc, char **argv)
+{
+        FILE *ss;                   /* input file */
+unsigned char
+
+	if (argc > 1){
+	  if (strncmp(argv[1], "-", 1) == 0){
+	    printf("using stdin\n");
+	    ss = stdin;
+	  }
+	  else {
+	    if ( (ss = fopen(argv[1], "rb")) != NULL ){
+	      struct stat fstat;
+	      if (stat(argv[1], &fstat) == 0 && S_ISREG(fstat.st_mode)){
+		printf("Opens %s\n", argv[1]);
+	      }
+	      else{
+		printf("File %s is not a regular file\n", argv[1]);
+		exit(1);
+	      }
+	    }
+	    else {
+	      printf("Can't open file %s\n", argv[1]);
+	      exit(1);
+	    }
+	  }
+	  fread(buf, sizeof(buf), 1, ss);
