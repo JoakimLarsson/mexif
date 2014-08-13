@@ -29,6 +29,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "exif.h"
+
 const char leth[]  = {0x49, 0x49, 0x2a, 0x00}; // Little endian TIFF header
 const char beth[]  = {0x4d, 0x4d, 0x00, 0x2a}; // Big endian TIFF header
 const char types[] = {0x00, 0x01, 0x01, 0x02, 0x04, 0x08, 0x00, 0x08, 0x00, 0x04, 0x08}; // size in bytes for EXIF types
@@ -259,28 +261,34 @@ int minimal_exif_tag_write (const char *filename,
  */
 int main(int argc, char **argv)
 {
-        FILE *ss;                   /* input file */
-unsigned char
-
-	if (argc > 1){
-	  if (strncmp(argv[1], "-", 1) == 0){
-	    printf("using stdin\n");
-	    ss = stdin;
-	  }
-	  else {
-	    if ( (ss = fopen(argv[1], "rb")) != NULL ){
-	      struct stat fstat;
-	      if (stat(argv[1], &fstat) == 0 && S_ISREG(fstat.st_mode)){
-		printf("Opens %s\n", argv[1]);
-	      }
-	      else{
-		printf("File %s is not a regular file\n", argv[1]);
-		exit(1);
-	      }
-	    }
-	    else {
-	      printf("Can't open file %s\n", argv[1]);
-	      exit(1);
-	    }
-	  }
-	  fread(buf, sizeof(buf), 1, ss);
+  FILE *ss;                   /* input file */
+  unsigned char buf[4096];
+    
+  if (argc != 2){
+	  printf("Utility needs arguments\n");
+	  exit(1);
+  }
+  if (strncmp(argv[1], "-", 1) == 0){
+    printf("using stdin\n");
+    ss = stdin;
+  }
+  else {
+    if ( (ss = fopen(argv[1], "rb")) != NULL ){
+      struct stat fstat;
+      if (stat(argv[1], &fstat) == 0 && S_ISREG(fstat.st_mode)){
+	printf("Opens %s\n", argv[1]);
+      }
+      else{
+	printf("File %s is not a regular file\n", argv[1]);
+	exit(1);
+      }
+    }
+    else {
+      printf("Can't open file %s\n", argv[1]);
+      exit(1);
+    }
+  }
+  /* We should be able to get all EXIF data within one 4Kb frame */ 
+  fread(buf, sizeof(buf), 1, ss);
+  close (ss);
+}
