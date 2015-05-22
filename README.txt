@@ -29,8 +29,8 @@ good motivation:
        avoided if tags are not moved or resized if not required. */
 
 I also wrote a special EXIF thumbnail extractor for the Gnome desktop itself 
-and itwas accepted by proxy through the gThumb maintainers. Great fun and a good 
-insight in the world of FOSS contributers in really large projects.
+and itwas accepted by proxy through the gThumb maintainers. Great fun and a 
+good insight in the world of FOSS contributers in really large projects.
 
 Joakim Larsson
 
